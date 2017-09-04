@@ -12,6 +12,7 @@
     <PackageLicenseUrl>https://raw.githubusercontent.com/ivorobyov/JsonRpc/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/ivorobyov/JsonRpc</PackageProjectUrl>
     <PackageOutputPath>nupkgs</PackageOutputPath>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
