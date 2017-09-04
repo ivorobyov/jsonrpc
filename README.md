@@ -1,7 +1,7 @@
 # JsonRpc
 JsonRpc 2.0 Server for .NET
 
-[![Build status](https://ci.appveyor.com/api/projects/status/bwj74ss7g2njhgdp/branch/master?svg=true)](https://ci.appveyor.com/project/ivorobyov/jsonrpc/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/bwj74ss7g2njhgdp/branch/master?svg=true)](https://ci.appveyor.com/project/ivorobyov/jsonrpc/branch/master) [![NuGet version](https://badge.fury.io/nu/ivorobyov.JsonRpc.svg)](https://badge.fury.io/nu/ivorobyov.JsonRpc)
 
 The .Net Standart 2.0 library for JSON-RPC 2.0 is a contactless, easy remote procedure call protocol
 
