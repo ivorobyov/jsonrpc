@@ -12,7 +12,7 @@ You can start using JsonRpc with our [nuget](https://www.nuget.org/packages/ivor
 To install JsonRpc, run the following command in the Package Manager Console
 
 ```
-Install-Package ivorobyov.JsonRpc -Version 0.1.0
+Install-Package ivorobyov.JsonRpc
 ```
 
 ### Getting Started
