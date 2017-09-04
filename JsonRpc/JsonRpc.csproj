@@ -2,6 +2,26 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>ivorobyov.JsonRpc</PackageId>
+    <Version>0.1.0</Version>
+    <Title>JsonRpc 2.0 for .NET</Title>
+    <Authors>ivorobyov</Authors>
+    <Description>JsonRpc 2.0 Server for .NET</Description>
+    <Copyright>Copyright (c) 2017 Ivan Vorobyov</Copyright>
+    <PackageTags>json-rpc, json-rpc.net, rpc, json, server</PackageTags>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/ivorobyov/JsonRpc/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/ivorobyov/JsonRpc</PackageProjectUrl>
+    <PackageOutputPath>nupkgs</PackageOutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>RELEASE;NETSTANDARD2_0</DefineConstants>
+    <Optimize>false</Optimize>
   </PropertyGroup>
 
   <ItemGroup>
