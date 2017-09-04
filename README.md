@@ -22,7 +22,7 @@ Using JsonRpc within a console application;
 * Create a console application
 * Install Json-Rpc.Net Core using NuGet
 
-* Create a class of your service by inheriting it from **JsonRpc.JsonRpcService** and create the necessary methods whose return type should be **JsonRpc.JsonRpcResponse**. *Use the **Result(object data)** or **Result<T>(T data)** base class method to create a response of type **JsonRpc.JsonRpcResponse***
+* Create a class of your service by inheriting it from **JsonRpc.JsonRpcService** and create the necessary methods whose return type should be **JsonRpc.JsonRpcResponse**. *Use the **Result(object data)** or **Result\<T\>(T data)** base class method to create a response of type **JsonRpc.JsonRpcResponse***
 
 ```c#
 class Service : JsonRpc.JsonRpcService
@@ -56,7 +56,7 @@ JsonRpc.JsonRpcProcessorProvider.RegisterProcessorFactory<Service>(o => {
 var jsonRpcProcessor = JsonRpc.JsonRpcProcessorProvider.CreateProcessor<Service>();
 ```
 
-* Use the methods **Process()** and **Process<TResult>()** to process incoming requests. Use the **ToJsonString()** method to serialize the response in the **Json** string
+* Use the methods **Process()** and **Process\<TResult\>()** to process incoming requests. Use the **ToJsonString()** method to serialize the response in the **Json** string
 
 ```c#
 var greetingResponse = jsonRpcProcessor.Process("{'method':'greeting', 'id': 1}");
