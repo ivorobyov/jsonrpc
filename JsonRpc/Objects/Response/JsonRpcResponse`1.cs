@@ -18,7 +18,7 @@ namespace JsonRpc
 			{
 				return (TResult)base.Result;
 			}
-			set
+			internal set
 			{
 				base.Result = value;
 			}

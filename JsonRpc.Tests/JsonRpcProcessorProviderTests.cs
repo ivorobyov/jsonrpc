@@ -11,29 +11,38 @@ namespace JsonRpc.Tests
 		private const string Method2Name = "method2";
 		private const string Method3Name = "method3";
 
-		static JsonRpcProcessorProviderTests()
+		[TestMethod]
+		[ExpectedException(typeof(InvalidOperationException))]
+		public void CheckRegisterExistingJsonRpcService()
 		{
-			JsonRpcProcessorProvider.RegisterProcessorFactory<TestJsonRpcService>(o =>
+			var provider = CreateProvider();
+
+			provider.Register<TestJsonRpcService>(o =>
 			{
-				o.RegisterJsonRpcMethod(Method1Name, s => s.Method1());
-				o.RegisterJsonRpcMethod(Method2Name, s => s.Method2(0, 0));
-				o.RegisterJsonRpcMethod(Method3Name, s => s.Method3(null));
 			});
 		}
 
 		[TestMethod]
 		[ExpectedException(typeof(InvalidOperationException))]
-		public void CheckRegisterExistingJsonRpcService()
+		public void CheckRegisterExistingJsonRpcMethod()
 		{
-			JsonRpcProcessorProvider.RegisterProcessorFactory<TestJsonRpcService>(o =>
+			var provider = new JsonRpcProcessorProvider().Register<TestJsonRpcService>(o =>
 			{
+				o.RegisterJsonRpcMethod(Method1Name, s => s.Method1());
+				o.RegisterJsonRpcMethod(Method2Name, s => s.Method2(0, 0));
+				o.RegisterJsonRpcMethod(Method3Name, s => s.Method3(null));
+				o.RegisterJsonRpcMethod(Method3Name, s => s.Method3(null));
 			});
+
+			provider.Get<TestJsonRpcService>();
 		}
 
 		[TestMethod]
 		public void CheckCreatedProcessorType()
 		{
-			var processor = JsonRpcProcessorProvider.CreateProcessor<TestJsonRpcService>();
+			var provider = CreateProvider();
+
+			var processor = provider.Get<TestJsonRpcService>();
 
 			Assert.IsInstanceOfType(processor, typeof(IJsonRpcProcessor));
 		}
@@ -41,7 +50,9 @@ namespace JsonRpc.Tests
 		[TestMethod]
 		public void CheckReturnedResponseType()
 		{
-			var processor = JsonRpcProcessorProvider.CreateProcessor<TestJsonRpcService>();
+			var provider = CreateProvider();
+
+			var processor = provider.Get<TestJsonRpcService>();
 
 			var result = processor.Process($"{{'method' : '{Method1Name}', 'id': '1'}}");
 
@@ -51,7 +62,9 @@ namespace JsonRpc.Tests
 		[TestMethod]
 		public void CheckReturnedResponseValue()
 		{
-			var processor = JsonRpcProcessorProvider.CreateProcessor<TestJsonRpcService>();
+			var provider = CreateProvider();
+
+			var processor = provider.Get<TestJsonRpcService>();
 
 			var result = processor.Process($"{{'method' : '{Method1Name}', 'id': '1'}}");
 
@@ -61,7 +74,9 @@ namespace JsonRpc.Tests
 		[TestMethod]
 		public void CheckReturnedResponseSumValueWithArrayParams()
 		{
-			var processor = JsonRpcProcessorProvider.CreateProcessor<TestJsonRpcService>();
+			var provider = CreateProvider();
+
+			var processor = provider.Get<TestJsonRpcService>();
 
 			int x = 1, y = 2;
 
@@ -73,7 +88,9 @@ namespace JsonRpc.Tests
 		[TestMethod]
 		public void CheckReturnedResponseSumValueWithRequestModelParams()
 		{
-			var processor = JsonRpcProcessorProvider.CreateProcessor<TestJsonRpcService>();
+			var provider = CreateProvider();
+
+			var processor = provider.Get<TestJsonRpcService>();
 
 			var testRequestModel = new TestRequestModel
 			{
@@ -91,7 +108,9 @@ namespace JsonRpc.Tests
 		[TestMethod]
 		public void CheckReturnedResponseSumValueWithInvalidRequestModelParams()
 		{
-			var processor = JsonRpcProcessorProvider.CreateProcessor<TestJsonRpcService>();
+			var provider = CreateProvider();
+
+			var processor = provider.Get<TestJsonRpcService>();
 
 			var testRequestModel = new
 			{
@@ -109,7 +128,9 @@ namespace JsonRpc.Tests
 		[TestMethod]
 		public void CheckReturnedErrorResponseType()
 		{
-			var processor = JsonRpcProcessorProvider.CreateProcessor<TestJsonRpcService>();
+			var provider = CreateProvider();
+
+			var processor = provider.Get<TestJsonRpcService>();
 
 			var result = processor.Process($"error");
 
@@ -119,7 +140,9 @@ namespace JsonRpc.Tests
 		[TestMethod]
 		public void CheckReturnedErrorResponseValue()
 		{
-			var processor = JsonRpcProcessorProvider.CreateProcessor<TestJsonRpcService>();
+			var provider = CreateProvider();
+
+			var processor = provider.Get<TestJsonRpcService>();
 
 			var result = processor.Process($"error") as JsonRpcErrorResponse;
 
@@ -129,7 +152,9 @@ namespace JsonRpc.Tests
 		[TestMethod]
 		public void CheckReturnedErrorResponseMethodNotFound()
 		{
-			var processor = JsonRpcProcessorProvider.CreateProcessor<TestJsonRpcService>();
+			var provider = CreateProvider();
+
+			var processor = provider.Get<TestJsonRpcService>();
 
 			var result = processor.Process($"{{'method':'invalidMethodName', 'id': '1'}}") as JsonRpcErrorResponse;
 
@@ -139,7 +164,9 @@ namespace JsonRpc.Tests
 		[TestMethod]
 		public void CheckReturnedResponseId()
 		{
-			var processor = JsonRpcProcessorProvider.CreateProcessor<TestJsonRpcService>();
+			var provider = CreateProvider();
+
+			var processor = provider.Get<TestJsonRpcService>();
 
 			var id = Guid.NewGuid();
 
@@ -151,11 +178,23 @@ namespace JsonRpc.Tests
 		[TestMethod]
 		public void CheckReturnedResponseWithoutId()
 		{
-			var processor = JsonRpcProcessorProvider.CreateProcessor<TestJsonRpcService>();
+			var provider = CreateProvider();
+
+			var processor = provider.Get<TestJsonRpcService>();
 
 			var result = processor.Process($"{{'method':'{Method1Name}' }}");
 
 			Assert.AreEqual(result, null);
+		}
+
+		private IJsonRpcProcessorProvider CreateProvider()
+		{
+			return new JsonRpcProcessorProvider().Register<TestJsonRpcService>(o =>
+			{
+				o.RegisterJsonRpcMethod(Method1Name, s => s.Method1());
+				o.RegisterJsonRpcMethod(Method2Name, s => s.Method2(0, 0));
+				o.RegisterJsonRpcMethod(Method3Name, s => s.Method3(null));
+			});
 		}
 	}
 }
