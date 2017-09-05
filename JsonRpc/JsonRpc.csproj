@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>ivorobyov.JsonRpc</PackageId>
-    <Version>1.0.1</Version>
+    <Version>1.1.0</Version>
     <Title>JsonRpc 2.0 for .NET</Title>
     <Authors>ivorobyov</Authors>
     <Description>JsonRpc 2.0 Server for .NET</Description>
