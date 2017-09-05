@@ -20,7 +20,7 @@ Install-Package ivorobyov.JsonRpc
 Using JsonRpc within a console application;
 
 * Create a console application
-* Install Json-Rpc.Net Core using NuGet
+* Install ivorobyov.JsonRpc using NuGet
 
 * Create a class of your service by inheriting it from **JsonRpc.JsonRpcService** and create the necessary methods whose return type should be **JsonRpc.JsonRpcResponse**. *Use the **Result(object data)** or **Result\<T\>(T data)** base class method to create a response of type **JsonRpc.JsonRpcResponse***
 
