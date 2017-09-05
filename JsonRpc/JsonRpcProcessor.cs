@@ -1,21 +1,21 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace JsonRpc
 {
-
 	class JsonRpcProcessor<TJsonRpcService> : IJsonRpcProcessor
-		where TJsonRpcService : JsonRpcService, new()
+		where TJsonRpcService : JsonRpcService
 	{
-		private TJsonRpcService service = new TJsonRpcService();
+		private TJsonRpcService service;
 
 		private JsonRpcServiceOptions<TJsonRpcService> options;
 
-		public JsonRpcProcessor(Action<IJsonRpcServiceOptions<TJsonRpcService>> configurator)
+		public JsonRpcProcessor(TJsonRpcService service, Action<IJsonRpcServiceOptions<TJsonRpcService>> configurator)
 		{
+			this.service = service;
+
 			options = new JsonRpcServiceOptions<TJsonRpcService>();
 
 			configurator(options);
@@ -91,6 +91,15 @@ namespace JsonRpc
 			{
 				Error = error
 			};
+		}
+
+		private static bool IsAsyncMethod(MethodInfo method)
+		{
+			Type attType = typeof(AsyncStateMachineAttribute);
+
+			var attrib = (AsyncStateMachineAttribute)method.GetCustomAttribute(attType);
+
+			return (attrib != null);
 		}
 	}
 }

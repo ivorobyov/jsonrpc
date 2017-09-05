@@ -44,16 +44,18 @@ class Service : JsonRpc.JsonRpcService
 * When initializing your application, register your service and configure its methods
 
 ```c#
-JsonRpc.JsonRpcProcessorProvider.RegisterProcessorFactory<Service>(o => {
-  o.RegisterJsonRpcMethod("greeting", s => s.Greeting());
-  o.RegisterJsonRpcMethod("sum", s => s.Sum(default(int), default(int)));
-});
+var provider = new JsonRpc.JsonRpcProcessorProvider()
+  .Register<TestJsonRpcService>(o =>
+  {
+    o.RegisterJsonRpcMethod("greeting", s => s.Greeting());
+    o.RegisterJsonRpcMethod("sum", s => s.Sum(default(int), default(int)));
+  });
 ```
 
 * Create a processor
 
 ```c#
-var jsonRpcProcessor = JsonRpc.JsonRpcProcessorProvider.CreateProcessor<Service>();
+var jsonRpcProcessor = provider.Get<Service>();
 ```
 
 * Use the methods **Process()** and **Process\<TResult\>()** to process incoming requests. Use the **ToJsonString()** method to serialize the response in the **Json** string

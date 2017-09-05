@@ -1,4 +1,6 @@
-﻿namespace JsonRpc
+﻿using System.Threading.Tasks;
+
+namespace JsonRpc
 {
 	/// <summary>
 	/// JsonRpc 2.0 processor
