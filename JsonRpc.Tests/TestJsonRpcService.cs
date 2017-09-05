@@ -1,4 +1,6 @@
-﻿namespace JsonRpc.Tests
+﻿using System.Threading.Tasks;
+
+namespace JsonRpc.Tests
 {
 	class TestJsonRpcService : JsonRpcService
 	{

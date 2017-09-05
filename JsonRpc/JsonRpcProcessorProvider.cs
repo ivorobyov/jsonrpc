@@ -4,47 +4,62 @@ using System.Collections.Generic;
 namespace JsonRpc
 {
 	/// <summary>
-	/// Provider of JsonRpc 2.0  processors
+	/// Provider of JsonRpc 2.0 services
 	/// </summary>
-	public static class JsonRpcProcessorProvider
+	public class JsonRpcProcessorProvider : IJsonRpcProcessorProvider
 	{
-		private static Dictionary<Type, Func<IJsonRpcProcessor>> factories = new Dictionary<Type, Func<IJsonRpcProcessor>>();
+		private Dictionary<Type, IJsonRpcProcessor> processors = new Dictionary<Type, IJsonRpcProcessor>();
 
 		/// <summary>
-		/// Register JsonRpc 2.0  processor
+		/// Register JsonRpc 2.0 service
 		/// </summary>
 		/// <typeparam name="TJsonRpcService">Type of JsonRpc 2.0  processor</typeparam>
 		/// <param name="configurator">Configurator of JsonRpc 2.0  processor</param>
-		public static void RegisterProcessorFactory<TJsonRpcService>(Action<IJsonRpcServiceOptions<TJsonRpcService>> configurator)
+		public IJsonRpcProcessorProvider Register<TJsonRpcService>(Action<IJsonRpcServiceOptions<TJsonRpcService>> configurator)
 			where TJsonRpcService : JsonRpcService, new()
+		{
+			return Register(() => new TJsonRpcService(), configurator);
+		}
+
+		/// <summary>
+		/// Register JsonRpc 2.0 service
+		/// </summary>
+		/// <typeparam name="TJsonRpcService">Type of JsonRpc 2.0  processor</typeparam>
+		/// <param name="configurator">Configurator of JsonRpc 2.0  processor</param>
+		public IJsonRpcProcessorProvider Register<TJsonRpcService>(Func<TJsonRpcService> serviceFactory, Action<IJsonRpcServiceOptions<TJsonRpcService>> configurator)
+			where TJsonRpcService : JsonRpcService
 		{
 			if (configurator == null)
 				throw new ArgumentNullException(nameof(configurator));
 
-			Func<IJsonRpcProcessor> factory = () => new JsonRpcProcessor<TJsonRpcService>(configurator);
+			var service = serviceFactory();
+
+			var processor = new JsonRpcProcessor<TJsonRpcService>(service, configurator);
 
 			var serviceType = typeof(TJsonRpcService);
 
-			if (factories.ContainsKey(serviceType))
+			if (processors.ContainsKey(serviceType))
 				throw new InvalidOperationException($"Service with type \"{ serviceType.FullName }\" already registered.");
 
-			factories.Add(serviceType, factory);
+			processors.Add(serviceType, processor);
+
+			return this;
 		}
 
 		/// <summary>
-		/// Create JsonRpc 2.0  processor
+		/// Get JsonRpc 2.0  processor
 		/// </summary>
 		/// <typeparam name="TJsonRpcService">Type of registered JsonRpc 2.0  processor</typeparam>
 		/// <returns>JsonRpc 2.0  processor</returns>
-		public static IJsonRpcProcessor CreateProcessor<TJsonRpcService>()
-			where TJsonRpcService : JsonRpcService, new()
+		public IJsonRpcProcessor Get<TJsonRpcService>()
+			where TJsonRpcService : JsonRpcService
 		{
 			var serviceType = typeof(TJsonRpcService);
 
-			if (!factories.ContainsKey(serviceType))
+			if (!processors.ContainsKey(serviceType))
 				throw new InvalidOperationException($"Service with type \"{ serviceType.FullName }\" is not registered.");
 
-			return factories[typeof(TJsonRpcService)]();
+			return processors[typeof(TJsonRpcService)];
 		}
 	}
 }

@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace JsonRpc
 {
 	class JsonRpcServiceOptions<TJsonRpcService> : IJsonRpcServiceOptions<TJsonRpcService>
-		where TJsonRpcService : JsonRpcService, new()
+		where TJsonRpcService : JsonRpcService
 	{
 		private Dictionary<string, MethodInfo> methodSelectors = new Dictionary<string, MethodInfo>();
 
@@ -23,6 +24,9 @@ namespace JsonRpc
 				throw new ArgumentException("The passed expression is not correct.");
 
 			var methodInfo = methodCallExpression.Method;
+
+			if (methodSelectors.ContainsKey(name))
+				throw new InvalidOperationException($"Method with name \"{ name }\" already registered.");
 
 			methodSelectors.Add(name, methodInfo);
 		}

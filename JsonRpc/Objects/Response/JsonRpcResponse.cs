@@ -21,7 +21,7 @@ namespace JsonRpc
 		/// Result
 		/// </summary>
 		[JsonProperty("result", Order = 2)]
-		public object Result { get; set; }
+		public object Result { get; internal set; }
 
 		/// <summary>
 		/// Id
